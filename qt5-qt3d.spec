@@ -7,9 +7,9 @@ Url:           http://www.qt.io
 Source0:       https://download.qt.io/official_releases/qt/5.11/%{version}/submodules/qt3d-everywhere-src-%{version}.tar.xz
 
 BuildRequires: qt5-rpm-macros >= %{version} qt5-qtbase-private-devel qt5-qtdeclarative-devel
-%{?_qt5:Requires: %{_qt5} = %{_qt5_version}}
 BuildRequires: qt5-qtimageformats qt5-qtxmlpatterns-devel pkgconfig(assimp) >= 3.3.1
-Requires: qt5-qtimageformats >= %{version}
+Requires:      qt5-qtimageformats >= %{version}
+%{?_qt5:Requires: %{_qt5} = %{_qt5_version}}
 
 %description
 Qt 3D support for 2D and 3D rendering in both Qt C++ and Qt Quick applications for
@@ -19,8 +19,11 @@ near-realtime simulation systems.
 Summary:       Provides development files for qt5-qt3d
 Requires:      qt5-qt3d = %{version}-%{release} qt5-qtbase-devel
 
+Provides:      %{name}-examples = %{version}-%{release}
+Obsoletes:     %{name}-examples < %{version}-%{release}
+
 %description   devel
-Provides development files and programming examples for qt5-qt3d
+Provides development files and programming examples for qt5-qt3d.
 
 %prep
 %autosetup  -n qt3d-everywhere-src-%{version}
@@ -42,18 +45,21 @@ for prl_file in libQt5*.prl ; do
 done
 popd
 
-%ldconfig_scriptlets
+%post
+/sbin/ldconfig
+%postun
+/sbin/ldconfig
 
 %files
 %license LICENSE.GPL* LICENSE.LGPL*
-%{_qt5_libdir}/{libQt53DQuick.so.5*,libQt53DInput.so.5*,libQt53DQuickRender.so.5*,libQt53DRender.so.5*}
-%{_qt5_libdir}/{libQt53DCore.so.5*,libQt53DLogic.so.5*,libQt53DQuickInput.so.5*,libQt53DExtras.so.5*}
-%{_qt5_libdir}/{libQt53DAnimation.so.5*,libQt53DQuickAnimation.so.5*,libQt53DQuickScene2D.so.5*,libQt53DQuickExtras.so.5*}
+%{_qt5_libdir}/{libQt53D*.so.5*}
 %{_qt5_qmldir}/{Qt3D/,QtQuick/Scene3D/,QtQuick/Scene2D/}
 %{_qt5_plugindir}/{sceneparsers/,renderplugins/,geometryloaders/}
 
 %files devel
-%{_qt5_bindir}/qgltf/{qgltf,libQt53D*.so,libQt53D*.pr1}
+%{_qt5_bindir}/qgltf
+%{_qt5_libdir}/{libQt53D*.so}
+%{_qt5_libdir}/{libQt53D*.prl}
 %{_qt5_libdir}/cmake/{Qt53DQuickScene2D,Qt53DQuickAnimation,Qt53DAnimation,Qt53DQuickExtras}
 %{_qt5_libdir}/cmake/{Qt53DExtras,Qt53DQuickInput,Qt53DLogic,Qt53DRender/}
 %{_qt5_libdir}/cmake/{Qt53DQuickRender/,Qt53DInput,Qt53DQuick,Qt53DCore/}
