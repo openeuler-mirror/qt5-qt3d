@@ -1,10 +1,10 @@
 Name:          qt5-qt3d
 Version:       5.11.1
-Release:       3
+Release:       4 
 Summary:       Qt5 - Qt3D C++ APIs and QML bindings
 License:       LGPLv2 with exceptions or GPLv3 with exceptions
 Url:           http://www.qt.io
-Source0:       https://download.qt.io/official_releases/qt/5.11/%{version}/submodules/qt3d-everywhere-src-%{version}.tar.xz
+Source0:       https://download.qt.io/new_archive/qt/5.11/%{version}/submodules/qt3d-everywhere-src-%{version}.tar.xz
 
 BuildRequires: qt5-rpm-macros >= %{version} qt5-qtbase-private-devel qt5-qtdeclarative-devel
 BuildRequires: qt5-qtimageformats qt5-qtxmlpatterns-devel pkgconfig(assimp) >= 3.3.1
@@ -73,6 +73,9 @@ popd
 %endif
 
 %changelog
+* Mon Sep 14 2020 liuweibo <liuweibo10@huawei.com> - 5.11.1-4
+- Fix Source0
+
 * Tue Dec 3 2019 Tianfei <tianfei16@huawei.com> - 5.11.1-3
 - Package init
 
