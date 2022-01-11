@@ -1,15 +1,19 @@
 Name:          qt5-qt3d
-Version:       5.11.1
-Release:       4 
+Version:       5.15.2
+Release:       1 
 Summary:       Qt5 - Qt3D C++ APIs and QML bindings
 License:       LGPLv2 with exceptions or GPLv3 with exceptions
 Url:           http://www.qt.io
-Source0:       https://download.qt.io/new_archive/qt/5.11/%{version}/submodules/qt3d-everywhere-src-%{version}.tar.xz
+%global majmin %(echo %{version} | cut -d. -f1-2)
+Source0:       https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/qt3d-everywhere-src-%{version}.tar.xz
+Source1:       qt3dcore-config-multilib_p.h
 
+BuildRequires: make
 BuildRequires: qt5-rpm-macros >= %{version} qt5-qtbase-private-devel qt5-qtdeclarative-devel
 BuildRequires: qt5-qtimageformats qt5-qtxmlpatterns-devel pkgconfig(assimp) >= 3.3.1
 Requires:      qt5-qtimageformats >= %{version}
 %{?_qt5:Requires: %{_qt5} = %{_qt5_version}}
+BuildRequires: qt5-qtbase-static >= %{version}
 
 %description
 Qt 3D support for 2D and 3D rendering in both Qt C++ and Qt Quick applications for
@@ -29,11 +33,18 @@ Provides development files and programming examples for qt5-qt3d.
 %autosetup  -n qt3d-everywhere-src-%{version}
 
 %build
+%define _lto_cflags %{nil}
+
 %{qmake_qt5}
 %make_build
 
 %install
 make install INSTALL_ROOT=%{buildroot}
+
+%ifarch x86_64
+  mv %{buildroot}%{_qt5_headerdir}/Qt3DCore/%{version}/Qt3DCore/private/qt3dcore-config_p.h %{buildroot}%{_qt5_headerdir}/Qt3DCore/%{version}/Qt3DCore/private/qt3dcore-config-%{__isa_bits}_p.h
+  install -p -m644 -D %{SOURCE1} %{buildroot}%{_qt5_headerdir}/Qt3DCore/%{version}/Qt3DCore/private/qt3dcore-config_p.h
+%endif
 
 pushd %{buildroot}%{_qt5_libdir}
 for prl_file in libQt5*.prl ; do
@@ -55,6 +66,7 @@ popd
 %{_qt5_libdir}/{libQt53D*.so.5*}
 %{_qt5_qmldir}/{Qt3D/,QtQuick/Scene3D/,QtQuick/Scene2D/}
 %{_qt5_plugindir}/{sceneparsers/,renderplugins/,geometryloaders/}
+%{_qt5_plugindir}/renderers/
 
 %files devel
 %{_qt5_bindir}/qgltf
@@ -73,6 +85,9 @@ popd
 %endif
 
 %changelog
+* Wed Oct 13 2021 peijiankang <peijiankang@kylinos.cn> - 5.15.2-1
+- update to upstream version 5.15.2
+
 * Mon Sep 14 2020 liuweibo <liuweibo10@huawei.com> - 5.11.1-4
 - Fix Source0
 
