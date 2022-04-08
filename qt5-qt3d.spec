@@ -1,6 +1,6 @@
 Name:          qt5-qt3d
 Version:       5.15.2
-Release:       1 
+Release:       2 
 Summary:       Qt5 - Qt3D C++ APIs and QML bindings
 License:       LGPLv2 with exceptions or GPLv3 with exceptions
 Url:           http://www.qt.io
@@ -14,6 +14,8 @@ BuildRequires: qt5-qtimageformats qt5-qtxmlpatterns-devel pkgconfig(assimp) >= 3
 Requires:      qt5-qtimageformats >= %{version}
 %{?_qt5:Requires: %{_qt5} = %{_qt5_version}}
 BuildRequires: qt5-qtbase-static >= %{version}
+
+Patch0:        riscv.patch
 
 %description
 Qt 3D support for 2D and 3D rendering in both Qt C++ and Qt Quick applications for
@@ -30,7 +32,7 @@ Obsoletes:     %{name}-examples < %{version}-%{release}
 Provides development files and programming examples for qt5-qt3d.
 
 %prep
-%autosetup  -n qt3d-everywhere-src-%{version}
+%autosetup -p1 -n qt3d-everywhere-src-%{version}
 
 %build
 %define _lto_cflags %{nil}
@@ -85,6 +87,9 @@ popd
 %endif
 
 %changelog
+* Fri Apr 8 2022 Jingwiw <ixoote@gmail.com> - 5.15.2-2
+- add  latomic link for riscv64
+
 * Wed Oct 13 2021 peijiankang <peijiankang@kylinos.cn> - 5.15.2-1
 - update to upstream version 5.15.2
 
