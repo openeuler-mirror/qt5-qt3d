@@ -1,0 +1,13 @@
+diff --git a/src/plugins/renderers/opengl/opengl.pri b/src/plugins/renderers/opengl/opengl.pri
+index 1682ab7..b1d3f83 100644
+--- a/src/plugins/renderers/opengl/opengl.pri
++++ b/src/plugins/renderers/opengl/opengl.pri
+@@ -25,6 +25,8 @@ INCLUDEPATH += $$PWD
+ # Qt3D is free of Q_FOREACH - make sure it stays that way:
+ DEFINES += QT_NO_FOREACH
+ 
++gcc:isEqual(QT_ARCH, "riscv64"): LIBS += -latomic
++
+ gcov {
+     QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
+     QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage
